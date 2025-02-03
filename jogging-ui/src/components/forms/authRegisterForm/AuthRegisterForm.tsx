@@ -8,7 +8,7 @@ import { ContactInfo } from "./Sections/ContactInfoFormSetup";
 import { PersonalInfo } from "./Sections/PersonalInfoFormSetup";
 import { useAuth } from "@/routes/auth/context/AuthProvider";
 import { toast } from "sonner";
-import { AxiosError } from "axios";
+//import { AxiosError } from "axios";
 import { Icons } from "@/lib/Icons.tsx";
 import axiosInstance from "../../../api/axiosConfig"; // Ensure you have an axios instance for API calls
 
@@ -144,11 +144,12 @@ export function AuthRegisterForm() {
     }
   };
 
+  /*
   // Helper function to check if error is an AxiosError
   function isAxiosError(error: unknown): error is AxiosError {
     return (error as AxiosError).isAxiosError !== undefined;
   }
-
+*/
   return (
     <>
       <div className="flex flex-col space-y-2 text-center">

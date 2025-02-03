@@ -87,9 +87,8 @@ internal class Program
                 options.AddPolicy("AllowSpecificOrigin", policyBuilder =>
                 {
                     policyBuilder.WithOrigins(
-                        "http://host.docker.internal:5187",
+                        "http://localhost:8888",
                         "http://localhost:5187",
-                        "https://host.docker.internal:7073",
                         "https://localhost:7073"
                         ) // Replace with your actual frontend URL
                         .AllowAnyMethod()

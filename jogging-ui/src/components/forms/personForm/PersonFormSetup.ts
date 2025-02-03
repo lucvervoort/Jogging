@@ -21,7 +21,7 @@ export const formSetupSchema = z.object({
 		required_error: 'Selecteer een geslacht.',
 	}),
 	ibanNumber: z.string().optional(),
-
+	loopClubs: z.string().optional(),
 	school: schoolSchema.optional(),
 	address: addressSchema,
 });

@@ -66,10 +66,11 @@ export interface Address {
   
   export interface Person {
 	id?: number;
-	lastName: string;
-	firstName: string;
+	lastName?: string | null;
+	firstName?: string | null;
 	birthDate: string;
 	ibanNumber?: string | null;
+	loopclubs?: any;
 	gender: 'M' | 'V';
 	profile?: Profile | null;
 	school?: { name?: string } | null;
@@ -95,6 +96,7 @@ export interface Address {
 	runTime: string;
 	personId: number;
 	person: Person;
+	participants: any;
 	payed: boolean;
 	competitionId: number;
 	competitionPerCategoryId?: number;
