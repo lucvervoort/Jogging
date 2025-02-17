@@ -1,0 +1,1 @@
+docker save -o jogging.tar mysql:latest jogging-jogging.api:latest jogging-jogging-ui:latest
