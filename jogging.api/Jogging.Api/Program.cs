@@ -11,9 +11,6 @@ using Serilog;
 
 namespace Jogging.Api;
 
-// https://shantanoo-desai.github.io/posts/technology/docker-compose-offline-stack/
-// configure sendgrid email
-
 internal class Program
 {
     public static void Main(string[] args)
@@ -54,11 +51,6 @@ internal class Program
                 options.EnableDetailedErrors();
             });
 
-            /*
-            DatabaseHelper.SetConnectionString(configuration.GetConnectionString("BackupConnection"),
-                configuration.GetConnectionString("BackupConnectionNoDb"));
-            */
-
             builder.Services.AddMemoryCache();
 
             // AutoMapper configuration
@@ -82,20 +74,41 @@ internal class Program
             builder.Services.AddHelperServices();
 
             // CORS Configuration
-            builder.Services.AddCors(options =>
+            var corsOptions = builder.Configuration.GetSection("Cors").Get<JoggingCorsOptions>();
+            if (corsOptions != null)
             {
-                options.AddPolicy("AllowSpecificOrigin", policyBuilder =>
+                Log.Information("Configured CORS in appsettings.json");
+                builder.Services.AddCors(options =>
                 {
-                    policyBuilder.WithOrigins(
-                        "http://localhost:8888",
-                        "http://localhost:5187",
-                        "https://localhost:7073"
-                        ) // Replace with your actual frontend URL
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials(); // Allow credentials (cookies, authorization headers, etc.)
+                    options.AddPolicy("AllowSpecificOrigin", policyBuilder =>
+                    {
+                        policyBuilder.WithOrigins(corsOptions.AllowedOrigins.Split(','))
+                                .WithMethods(corsOptions.AllowedMethods.Split(','))
+                                .WithHeaders(corsOptions.AllowedHeaders.Split(','))
+                                .WithExposedHeaders("X-Pagination".Split(','))
+                                .AllowCredentials(); // Allow credentials (cookies, authorization headers, etc.)
+                    });
                 });
-            });
+            }
+            else
+            {
+                Log.Information("Hardcoded CORS");
+                builder.Services.AddCors(options =>
+                {
+                    options.AddPolicy("AllowSpecificOrigin", policyBuilder =>
+                    {
+                        policyBuilder.WithOrigins(
+                            "http://localhost:8888",
+                            "http://localhost:5187",
+                            "https://localhost:7073"
+                            ) // Replace with your actual frontend URL
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .WithExposedHeaders("X-Pagination")
+                            .AllowCredentials(); // Allow credentials (cookies, authorization headers, etc.)
+                    });
+                });
+            }
 
             // Configure Serilog for logging
             builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
