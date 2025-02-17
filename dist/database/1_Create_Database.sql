@@ -15,6 +15,10 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+USE `mysql`;		
+UPDATE `user` SET `host` = '%'		
+FLUSH PRIVILEGES;
+
 CREATE DATABASE IF NOT EXISTS jogging2;
 USE jogging2;
 
@@ -132,7 +136,7 @@ UNLOCK TABLES;
 /*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_auth_user_created` AFTER INSERT ON `auth_users` FOR EACH ROW BEGIN
-    INSERT INTO Profile (id, role) VALUES (NEW.id, 'User');
+    INSERT INTO profile (id, role) VALUES (NEW.id, 'User');
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;

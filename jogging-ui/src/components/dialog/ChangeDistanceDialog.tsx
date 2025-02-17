@@ -63,7 +63,7 @@ const ChangeDistanceDialog: React.FC<ChangeDistanceDialogProps> = ({
 				<DialogHeader>
 					<DialogTitle>Afstand Wijzigen</DialogTitle>
 					<DialogDescription>
-						Selecteer een nieuwe afstand voor uw inschrijving.
+						Selecteer een nieuwe afstand voor je inschrijving.
 					</DialogDescription>
 				</DialogHeader>
 				<Select

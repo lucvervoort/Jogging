@@ -31,7 +31,7 @@ export function DaginschrijvingDialog() {
 						Als je inschrijft voor een daginschrijving, zullen je resultaten
 						openbaar zijn, maar je komt niet in aanmerking voor het klassement.
 						Wil je meedoen aan het klassement? Maak dan een account aan en zorg
-						dat je bent ingelogd vooraleer je jouw inschrijft.
+						dat je bent ingelogd vooraleer je je inschrijft.
 					</DialogDescription>
 				</div>
 				<DialogFooter className='gap-1 md:gap-0'>

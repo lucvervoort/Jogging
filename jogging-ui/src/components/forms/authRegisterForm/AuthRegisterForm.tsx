@@ -123,9 +123,9 @@ export function AuthRegisterForm() {
       } catch (error) {
         if (error) {
           if (error === "This email address is already registered.") {
-            console.error("Registratie mislukt: E-mailadres bestaat al.");
+            console.error("Registratie mislukt: e-mailadres bestaat al.");
             toast(
-              "Registratie mislukt: Er bestaat al een account met dit e-mailadres."
+              "Registratie mislukt: er bestaat al een account met dit e-mailadres."
             );
           } else {
             console.error("Registratie mislukt:", error);
@@ -155,7 +155,7 @@ export function AuthRegisterForm() {
       <div className="flex flex-col space-y-2 text-center">
         <h1 className="text-2xl font-semibold tracking-tight">Registreer</h1>
         <p className="text-sm text-muted-foreground">
-          Voer hier uw gegevens in om een account aan te maken.
+          Voer hier je gegevens in om een account aan te maken.
         </p>
       </div>
 
@@ -184,7 +184,7 @@ export function AuthRegisterForm() {
         {/* Club Membership Question */}
         <div className="m4">
           <p className="mt-2 block w-full">
-            Bent u al lid van een bestaand loopclub?
+            Ben je al lid van een bestaande loopclub?
           </p>
           <div className="flex items-center mt-2">
             <label className="mr-4">
@@ -210,7 +210,7 @@ export function AuthRegisterForm() {
           {isClubMember === true && (
             <div className="mt-2">
               <label htmlFor="clubDropdown" className="w-full text-left">
-                Selecteer uw loopclub
+                Selecteer je loopclub
               </label>
               <select
                 id="clubDropdown"

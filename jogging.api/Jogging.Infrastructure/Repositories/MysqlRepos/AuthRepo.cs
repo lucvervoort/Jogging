@@ -3,7 +3,6 @@ using Jogging.Domain.Exceptions;
 using Jogging.Domain.Helpers;
 using Jogging.Domain.Interfaces.RepositoryInterfaces;
 using Jogging.Domain.Models;
-using Jogging.Infrastructure.Models.SearchModels.Account;
 using Jogging.Persistence.Context;
 using Jogging.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
@@ -107,10 +106,12 @@ namespace Jogging.Infrastructure.Repositories.MysqlRepos
 
             try
             {
+                // TODO: verify old password first
                 await _dbJoggingContext.Database.ExecuteSqlRawAsync(
-                    "CALL update_user_password(@user_id, @old_password, @new_password)",
+                    //"CALL update_user_password(@user_id, @old_password, @new_password)",
+                    "UPDATE AUTH_USERS SET password = @new_password WHERE id = @user_id",
                     new MySqlParameter("@user_id", passwordChangeInfo.UserId),
-                    new MySqlParameter("@old_password", hashedOldPassword),
+                    //new MySqlParameter("@old_password", hashedOldPassword),
                     new MySqlParameter("@new_password", hashedNewPassword)
                 );
             }
@@ -127,7 +128,8 @@ namespace Jogging.Infrastructure.Repositories.MysqlRepos
             try
             {
                 await _dbJoggingContext.Database.ExecuteSqlRawAsync(
-                    "CALL set_email_confirm_token(@confirm_token, @Email)",
+                    //"CALL set_email_confirm_token(@confirm_token, @Email)",
+                    "UPDATE AUTH_USERS SET confirm_token = @confirm_token WHERE username = @Email",
                     new MySqlParameter("@confirm_token", confirmToken),
                     new MySqlParameter("@Email", email)
                 );

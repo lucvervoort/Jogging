@@ -25,8 +25,8 @@ const CookieDrawer = () => {
 				<div className='flex flex-col gap-1 p-3 text-center md:text-start'>
 					<h2 className='text-xl font-semibold'>Cookiebeleid</h2>
 					<p>
-						Wij gebruiken cookies om uw ervaring te verbeteren. Door deze site
-						te bezoeken, gaat u akkoord met ons gebruik van cookies.
+						Wij gebruiken cookies om je ervaring te verbeteren. Door deze site
+						te bezoeken, ga je akkoord met ons gebruik van cookies.
 					</p>
 				</div>
 				<div className='flex items-center justify-center '>

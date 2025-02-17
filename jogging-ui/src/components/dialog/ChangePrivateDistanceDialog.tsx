@@ -68,7 +68,7 @@ const ChangePrivateDistanceDialog: React.FC<
 				<DialogHeader>
 					<DialogTitle>Afstand Wijzigen</DialogTitle>
 					<DialogDescription>
-						Selecteer een nieuwe afstand voor uw inschrijving.
+						Selecteer een nieuwe afstand voor je inschrijving.
 					</DialogDescription>
 				</DialogHeader>
 				<Select
