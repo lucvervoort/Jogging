@@ -10,19 +10,27 @@ using Jogging.Persistence.Models.School;
 using Jogging.Persistence.Models.SearchModels.Registration;
 using Jogging.Persistence.Models.SearchModels.Result;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Jogging.Persistence.Context;
 
 public partial class JoggingContext : DbContext
 {
-    public JoggingContext()
+    protected readonly IConfiguration _configuration;
+    protected readonly ILogger<JoggingContext> _logger;
+
+    public JoggingContext(IConfiguration configuration, ILogger<JoggingContext> logger)
     {
+        _configuration = configuration;
+        _logger = logger;
     }
 
-    public JoggingContext(DbContextOptions<JoggingContext> options)
+    public JoggingContext(DbContextOptions<JoggingContext> options, IConfiguration configuration, ILogger<JoggingContext> logger)
         : base(options)
     {
+        _configuration = configuration;
+        _logger = logger;
     }
 
     public virtual DbSet<SimpleAddress> SimpleAddresses { get; set; }
@@ -61,17 +69,21 @@ public partial class JoggingContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        /*
         var cs = "server=host.docker.internal;port=3306;database=jogging2;user=root;password=root";
-        //Console.WriteLine("OnConfiguring " + cs);
+        */
+        var connectionString = _configuration.GetConnectionString("DefaultConnection");
+        _logger?.LogInformation("===> JoggingContext connection string: " + connectionString + " <===");
         optionsBuilder
             .EnableSensitiveDataLogging()
             .EnableDetailedErrors();
-        var sv = ServerVersion.AutoDetect(cs);
-        optionsBuilder.UseMySql(cs, sv /*ServerVersion.Parse("8.0.34-mysql")*/);
+        var sv = ServerVersion.AutoDetect(connectionString);
+        optionsBuilder.UseMySql(connectionString, sv /*ServerVersion.Parse("8.0.34-mysql")*/);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        _logger?.LogInformation("Entering OnModelCreating...");
         modelBuilder
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");

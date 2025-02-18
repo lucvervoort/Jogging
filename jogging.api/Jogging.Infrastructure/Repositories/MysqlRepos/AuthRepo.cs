@@ -56,7 +56,7 @@ namespace Jogging.Infrastructure.Repositories.MysqlRepos
         }
 
         
-        //TODO: CHECK AND CORRECT + ADD HASHING witg bcrypt?
+        //TODO: CHECK AND CORRECT + ADD HASHING with bcrypt?
         public async Task<string> SignUpAsync(string email, string? password)
         {
             // Generate a random password if not provided

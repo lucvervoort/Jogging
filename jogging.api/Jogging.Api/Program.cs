@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 //using Microsoft.EntityFrameworkCore.Diagnostics;
 //using Microsoft.Extensions.Configuration;
 using Serilog;
+//using System.Net.NetworkInformation;
 //using Serilog.Sinks.Discord;
 
 namespace Jogging.Api;
@@ -43,10 +44,12 @@ internal class Program
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 if(string.IsNullOrEmpty(connectionString))
                 {
-                    connectionString = "server=docker.host.internal;port=3306;database=jogging2;user=root;password=root";
+                    Log.Information("Hardcoded connection string...");
+                    connectionString = "server=host.docker.internal;port=3306;database=jogging2;user=root;password=root";
                 }
+                Log.Information("Setting connection string in Program.cs: " + connectionString);
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-                options.LogTo(Log.Warning, LogLevel.Warning);
+                options.LogTo(Log.Debug, LogLevel.Debug);
                 options.EnableSensitiveDataLogging();
                 options.EnableDetailedErrors();
             });
@@ -77,15 +80,21 @@ internal class Program
             var corsOptions = builder.Configuration.GetSection("Cors").Get<JoggingCorsOptions>();
             if (corsOptions != null)
             {
-                Log.Information("Configured CORS in appsettings.json");
+                var allowedOrigins = corsOptions.AllowedOrigins.Split(',');
+                var allowedMethods = corsOptions.AllowedMethods.Split(',');
+                var allowedHeaders = corsOptions.AllowedHeaders.Split(',');
+                Log.Information("Configured CORS in appsettings.json (methods and headers ignored)");
+                Log.Information($"Origins: {string.Join(",", allowedOrigins)}");
+                //Log.Information($"Methods: {string.Join(",", allowedMethods)}");
+                //Log.Information($"Headers: {string.Join(",", allowedHeaders)}");
                 builder.Services.AddCors(options =>
                 {
                     options.AddPolicy("AllowSpecificOrigin", policyBuilder =>
                     {
-                        policyBuilder.WithOrigins(corsOptions.AllowedOrigins.Split(','))
-                                .WithMethods(corsOptions.AllowedMethods.Split(','))
-                                .WithHeaders(corsOptions.AllowedHeaders.Split(','))
-                                .WithExposedHeaders("X-Pagination".Split(','))
+                        policyBuilder.WithOrigins(allowedOrigins)
+                                .AllowAnyHeader()
+                                .AllowAnyMethod()
+                                //.WithExposedHeaders("X-Pagination".Split(','))
                                 .AllowCredentials(); // Allow credentials (cookies, authorization headers, etc.)
                     });
                 });
@@ -104,7 +113,7 @@ internal class Program
                             ) // Replace with your actual frontend URL
                             .AllowAnyMethod()
                             .AllowAnyHeader()
-                            .WithExposedHeaders("X-Pagination")
+                            //.WithExposedHeaders("X-Pagination")
                             .AllowCredentials(); // Allow credentials (cookies, authorization headers, etc.)
                     });
                 });
@@ -121,6 +130,27 @@ internal class Program
             builder.Services.AddCustomAuthentication(configuration);
             builder.Services.AddSwaggerGen();
 
+            /*
+            // 172.17.0.1 i s the host.docker.internal on Linux
+            try
+            {
+                Ping myPing = new();
+                PingReply reply = myPing.Send("host.docker.internal", 1000);
+                if (reply != null)
+                {
+                    Log.Information("Status :  " + reply.Status + ", Time : " + reply.RoundtripTime.ToString() + ", Address : " + reply.Address);
+                }
+                else
+                {
+                    Log.Information("Ping failed");
+                }
+            }
+            catch
+            {
+                Console.WriteLine("ERROR: You have Some TIMEOUT issue");
+            }
+            */
+
             var app = builder.Build();
 
             // Add HSTS headers
@@ -129,6 +159,7 @@ internal class Program
             // Enable Swagger UI only in development
             // if (app.Environment.IsDevelopment())
             {
+                Log.Information($"Swagger supported in {app.Environment.EnvironmentName}");
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "jogging-api v1"));
             }

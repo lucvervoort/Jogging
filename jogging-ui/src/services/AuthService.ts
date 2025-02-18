@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { Person } from '@/types';
 
-const API_URL = 'http://localhost:5187/api/auth';
+const API_URL = 'http://192.168.1.163:5187/api/auth';
 
 interface AuthResponse {
 	person: Person;

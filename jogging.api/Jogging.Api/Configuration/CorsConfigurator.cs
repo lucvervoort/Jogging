@@ -10,7 +10,7 @@ public class CorsConfigurator
         options.AddPolicy("AllowAny",
             builder =>
             {
-                builder.WithOrigins("http://20.56.159.69:50545", "http://docker.host.internal:5173", "https://docker.host.internal:5173")
+                builder.WithOrigins("http://20.56.159.69:50545", "http://host.docker.internal:5173", "https://host.docker.internal:5173")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
